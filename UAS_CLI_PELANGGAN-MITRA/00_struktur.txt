@@ -1,6 +1,5 @@
 UAS_CLI_MITRA-USER/
 |
-├── 00_struktur.txt
 ├── auth.py
 ├── database_makanan.py
 ├── main.py
