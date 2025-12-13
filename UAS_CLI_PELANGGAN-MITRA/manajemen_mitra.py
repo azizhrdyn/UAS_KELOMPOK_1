@@ -30,3 +30,25 @@ def hapus_data():
     idx = input("Masukkan index baris yang akan dihapus (atau kosong): ").strip()
     if idx == "":
         return
+    try:
+        idx = int(idx)
+        if idx in df.index:
+            row = df.loc[idx].to_dict()
+            print("Kosongkan input untuk mempertahankan nilai lama.")
+            nama = input(f"Nama ({row['nama']}): ").strip() or row['nama']
+            restoran = input(f"Restoran ({row['restoran']}): ").strip() or row['restoran']
+            kalori = input(f"Kalori ({row['kalori']}): ").strip()
+            harga = input(f"Harga ({row['harga']}): ").strip()
+            kalori = safe_int(kalori, int(row['kalori']))
+            harga = safe_int(harga, int(row['harga']))
+            df.at[idx, 'nama'] = nama
+            df.at[idx, 'restoran'] = restoran
+            df.at[idx, 'kalori'] = kalori
+            df.at[idx, 'harga'] = harga
+            save_makanan(df)
+            print("Data berhasil diupdate.")
+        else:
+            print("Index tidak ditemukan.")
+    except Exception as e:
+        print("Terjadi error:", e)
+    input("\nENTER...")
