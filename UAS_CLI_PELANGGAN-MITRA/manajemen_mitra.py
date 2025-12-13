@@ -16,3 +16,10 @@ def tambah_data():
     restoran = input("Nama restoran  : ").strip()
     kalori = safe_int(input("Kalori (angka) : "), 0)
     harga = safe_int(input("Harga (angka)  : "), 0)
+    
+df = load_makanan()
+    new = {"nama": nama, "restoran": restoran, "kalori": kalori, "harga": harga}
+    df = pd.concat([df, pd.DataFrame([new])], ignore_index=True)
+    df.to_csv("makanan.csv", index=False)
+    print("Data berhasil ditambahkan.")
+    input("\nENTER...")
