@@ -23,4 +23,14 @@ def print_hasil(df, judul="Hasil"):
         print("Tidak ada rekomendasi tersedia.")
         return
     print(df[["nama","restoran","kalori","harga"]].to_string(index=False))
+
+def menu_rekomendasi():
+    while True:
+        print("\n=== MENU REKOMENDASI MAKANAN ===")
+        print("1. Rekomendasi Kalori Rendah")
+        print("2. Rekomendasi Harga Murah")
+        print("3. Rekomendasi Terbaik")
+        print("0. Kembali")
+        pilih = input("Pilih: ").strip()
     
+
