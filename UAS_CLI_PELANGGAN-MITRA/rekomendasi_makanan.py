@@ -32,6 +32,7 @@ def menu_rekomendasi():
         print("3. Rekomendasi Terbaik")
         print("0. Kembali")
         pilih = input("Pilih: ").strip()
+        
         if pilih == "1":
             batas = input("Batas kalori (default 300): ").strip()
             batas = int(batas) if batas else 300
@@ -54,4 +55,3 @@ def menu_rekomendasi():
             break
         else:
             print("Pilihan tidak valid!")
-            
