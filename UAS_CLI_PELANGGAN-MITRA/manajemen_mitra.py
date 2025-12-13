@@ -24,6 +24,8 @@ df = load_makanan()
     print("Data berhasil ditambahkan.")
     input("\nENTER...")
 
+
+
 def hapus_data():
     df = load_makanan()
     print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
@@ -52,3 +54,10 @@ def hapus_data():
     except Exception as e:
         print("Terjadi error:", e)
     input("\nENTER...")
+
+def reload_csv():
+    print("Reloading dari file CSV...")
+    df = reload_from_csv()
+    print("Reload selesai. Jumlah baris:", len(df))
+    input("\nENTER...")
+
