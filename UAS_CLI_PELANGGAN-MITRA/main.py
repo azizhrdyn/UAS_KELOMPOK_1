@@ -22,3 +22,12 @@ def menu_mitra(user):
         print("7. Olah Data (sorting/searching)")
         print("0. Logout")
         pilih = input("Pilih: ").strip()
+
+def main():
+    while True:
+        clear_screen()
+        print("=== FLAVOR OF ONE DAY (CLI) ===")
+        print("1. Login")
+        print("2. Register demo user (opsional)")
+        print("0. Keluar")
+        pilih = input("Pilih: ").strip()
