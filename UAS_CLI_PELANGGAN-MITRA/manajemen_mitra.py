@@ -17,19 +17,35 @@ def tambah_data():
     kalori = safe_int(input("Kalori (angka) : "), 0)
     harga = safe_int(input("Harga (angka)  : "), 0)
     
-df = load_makanan()
+    df = load_makanan()
     new = {"nama": nama, "restoran": restoran, "kalori": kalori, "harga": harga}
     df = pd.concat([df, pd.DataFrame([new])], ignore_index=True)
     df.to_csv("makanan.csv", index=False)
     print("Data berhasil ditambahkan.")
     input("\nENTER...")
 
-
-
 def hapus_data():
     df = load_makanan()
     print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
     idx = input("Masukkan index baris yang akan dihapus (atau kosong): ").strip()
+    if idx == "":
+        return
+    try:
+        idx = int(idx)
+        if idx in df.index:
+            df = df.drop(index=idx)
+            save_makanan(df.reset_index(drop=True))
+            print("Baris dihapus.")
+        else:
+            print("Index tidak ditemukan.")
+    except:
+        print("Input tidak valid.")
+    input("\nENTER...")
+
+def update_data():
+    df = load_makanan()
+    print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
+    idx = input("Masukkan index baris yang akan diupdate (atau kosong): ").strip()
     if idx == "":
         return
     try:
@@ -60,4 +76,3 @@ def reload_csv():
     df = reload_from_csv()
     print("Reload selesai. Jumlah baris:", len(df))
     input("\nENTER...")
-
