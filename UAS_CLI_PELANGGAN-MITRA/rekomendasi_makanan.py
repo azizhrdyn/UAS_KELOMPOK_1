@@ -16,3 +16,11 @@ def rekomendasi_terbaik(jumlah=3):
     df['skor'] = df['harga'].astype(float)*0.7 + df['kalori'].astype(float)*0.3
     df_sorted = df.sort_values('skor').head(jumlah)
     return df_sorted.drop(columns=["skor"])
+
+def print_hasil(df, judul="Hasil"):
+    print(f"\n=== {judul} ===")
+    if df is None or df.empty:
+        print("Tidak ada rekomendasi tersedia.")
+        return
+    print(df[["nama","restoran","kalori","harga"]].to_string(index=False))
+    
