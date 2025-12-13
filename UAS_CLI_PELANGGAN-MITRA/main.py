@@ -1,3 +1,6 @@
+from utils import clear_screen, press_enter, safe_int, exit_program
+from auth import login, register_demo
+
 def menu_pelanggan(user):
     while True:
         clear_screen()
@@ -55,4 +58,5 @@ def main():
         else:
             print("Pilihan tidak valid.")
             press_enter()
+
 
