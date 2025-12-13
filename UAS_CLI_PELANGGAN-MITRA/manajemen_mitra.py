@@ -23,3 +23,10 @@ df = load_makanan()
     df.to_csv("makanan.csv", index=False)
     print("Data berhasil ditambahkan.")
     input("\nENTER...")
+
+def hapus_data():
+    df = load_makanan()
+    print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
+    idx = input("Masukkan index baris yang akan dihapus (atau kosong): ").strip()
+    if idx == "":
+        return
