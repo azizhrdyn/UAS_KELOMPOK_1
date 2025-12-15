@@ -1,5 +1,11 @@
 from utils import clear_screen, press_enter, safe_int, exit_program
 from auth import login, register_demo
+from rekomendasi_makanan import menu_rekomendasi, print_hasil, rekomendasi_terbaik
+from olah_makanan import menu_olah_makanan
+from manajemen_mitra import lihat_data, tambah_data, hapus_data, update_data, reload_csv
+from pembayaran import simulasi_pembayaran
+from database_makanan import load_makanan
+import pandas as pd
 
 def menu_pelanggan(user):
     while True:
@@ -58,5 +64,6 @@ def main():
         else:
             print("Pilihan tidak valid.")
             press_enter()
+
 
 
