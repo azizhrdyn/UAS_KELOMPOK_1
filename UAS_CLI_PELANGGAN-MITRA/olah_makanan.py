@@ -6,3 +6,7 @@ def bubble_sort_list_of_dicts(lst, key):
             if arr[j][key] > arr[j+1][key]:
                 arr[j], arr[j+1] = arr[j+1], arr[j]
     return arr
+
+def search_by_name(df, keyword):
+    kw = keyword.lower()
+    return df[df['nama'].str.lower().str.contains(kw, na=False)]
