@@ -10,3 +10,14 @@ def bubble_sort_list_of_dicts(lst, key):
 def search_by_name(df, keyword):
     kw = keyword.lower()
     return df[df['nama'].str.lower().str.contains(kw, na=False)]
+def menu_olah_makanan():
+    df = load_makanan()
+    while True:
+        print("\n=== Olah Data (Sorting & Searching) ===")
+        print("1. Sorting berdasarkan harga (ascending)")
+        print("2. Sorting berdasarkan kalori (ascending)")
+        print("3. Cari makanan (nama)")
+        print("4. Tampilkan array harga (NumPy) + contoh searching")
+        print("0. Kembali")
+        pilih = input("Pilih: ").strip()
+
