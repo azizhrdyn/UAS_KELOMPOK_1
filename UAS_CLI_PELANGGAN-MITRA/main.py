@@ -80,7 +80,7 @@ def menu_pelanggan(user):
             break
         else:
             print("Pilihan tidak valid.")
-            press_enter()    
+            press_enter()
             
 def menu_mitra(user):
     while True:
@@ -95,6 +95,27 @@ def menu_mitra(user):
         print("7. Olah Data (sorting/searching)")
         print("0. Logout")
         pilih = input("Pilih: ").strip()
+        
+        if pilih == "1":
+            print(f"\nProfil: {user}")
+            press_enter()
+        elif pilih == "2":
+            lihat_data()
+        elif pilih == "3":
+            tambah_data()
+        elif pilih == "4":
+            hapus_data()
+        elif pilih == "5":
+            update_data()
+        elif pilih == "6":
+            reload_csv()
+        elif pilih == "7":
+            menu_olah_makanan()
+        elif pilih == "0":
+            break
+        else:
+            print("Pilihan tidak valid.")
+            press_enter()
 
 def main():
     while True:
@@ -128,9 +149,9 @@ def main():
         else:
             print("Pilihan tidak valid.")
             press_enter()
-            
 
-
+if __name__ == "__main__":
+    main()
 
 
 
