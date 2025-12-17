@@ -61,6 +61,26 @@ def menu_pelanggan(user):
                 print("Tidak ada item valid dipesan.")
                 press_enter()
                 continue
+            print("\n=== Ringkasan Order ===")
+            for ln in order_lines:
+                print(f"{ln[0]} ({ln[1]}) x{ln[2]} - Rp{ln[4]}")
+            print("Total: Rp", total)
+            konfirm = input("Lanjut ke pembayaran? (y/n): ").strip().lower()
+            if konfirm == "y":
+                sukses = simulasi_pembayaran(total)
+                if sukses:
+                    print("Order selesai — terima kasih.")
+                else:
+                    print("Pembayaran gagal.")
+                press_enter()
+            else:
+                print("Order dibatalkan.")
+                press_enter()
+        elif pilih == "0":
+            break
+        else:
+            print("Pilihan tidak valid.")
+            press_enter()    
             
 def menu_mitra(user):
     while True:
@@ -108,6 +128,10 @@ def main():
         else:
             print("Pilihan tidak valid.")
             press_enter()
+            
+
+
+
 
 
 
