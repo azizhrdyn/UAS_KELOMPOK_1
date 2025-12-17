@@ -7,7 +7,9 @@ def lihat_data():
     if df.empty:
         print("\nBelum ada data makanan.")
     else:
-        print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
+        df_view = df[["nama","restoran","kalori","harga"]].copy()
+        df_view.index = range(1, len(df_view) + 1)
+        print(df_view.to_string(index=True))
     input("\nENTER untuk kembali...")
 
 def tambah_data():
@@ -97,4 +99,5 @@ def reload_csv():
     df = reload_from_csv()
     print("Reload selesai. Jumlah baris:", len(df))
     input("\nENTER...")
+
 
