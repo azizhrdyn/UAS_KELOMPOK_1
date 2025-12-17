@@ -12,11 +12,32 @@ def lihat_data():
 
 def tambah_data():
     print("\n=== Tambah Data Makanan (Mitra) ===")
-    nama = input("Nama makanan   : ").strip()
-    restoran = input("Nama restoran  : ").strip()
-    kalori = safe_int(input("Kalori (angka) : "), 0)
-    harga = safe_int(input("Harga (angka)  : "), 0)
-    
+    while True:
+        nama = input("Nama makanan   : ").strip()
+        if nama:
+            break
+        print("Nama makanan tidak boleh kosong.")
+
+    while True:
+        restoran = input("Nama restoran  : ").strip()
+        if restoran:
+            break
+        print("Nama restoran tidak boleh kosong.")
+
+    while True:
+        kalori = input("Kalori (angka) : ").strip()
+        if kalori.isdigit():
+            kalori = int(kalori)
+            break
+        print("Kalori harus berupa angka dan tidak boleh kosong.")
+
+    while True:
+        harga = input("Harga (angka)  : ").strip()
+        if harga.isdigit():
+            harga = int(harga)
+            break
+        print("Harga harus berupa angka dan tidak boleh kosong.")
+        
     df = load_makanan()
     new = {"nama": nama, "restoran": restoran, "kalori": kalori, "harga": harga}
     df = pd.concat([df, pd.DataFrame([new])], ignore_index=True)
@@ -76,3 +97,4 @@ def reload_csv():
     df = reload_from_csv()
     print("Reload selesai. Jumlah baris:", len(df))
     input("\nENTER...")
+
