@@ -20,7 +20,11 @@ def menu_pelanggan(user):
         pilih = input("Pilih: ").strip()
 
         if pilih == "1":
-            print(f"\nProfil: {user}")
+            clear_screen()
+            print("=== PROFIL PELANGGAN ===")
+            print(f"Nama     : {user['nama']}")
+            print(f"Username : {user['username']}")
+            print("========================")
             press_enter()
         elif pilih == "2":
             df = load_makanan()
@@ -104,7 +108,11 @@ def menu_mitra(user):
         pilih = input("Pilih: ").strip()
 
         if pilih == "1":
-            print(f"\nProfil: {user}")
+            clear_screen()
+            print("=== PROFIL MITRA ===")
+            print(f"Nama     : {user['nama']}")
+            print(f"Username : {user['username']}")
+            print("========================")
             press_enter()
         elif pilih == "2":
             lihat_data()
@@ -213,3 +221,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
