@@ -17,7 +17,27 @@ def menu_pelanggan(user):
         print("4. Order Makanan (simulasi)")
         print("0. Logout")
         pilih = input("Pilih: ").strip()
-
+        if pilih == "1":
+            print(f"\nProfil: {user}")
+            press_enter()
+        elif pilih == "2":
+            df = load_makanan()
+            if df.empty:
+                print("\nBelum ada data makanan.")
+            else:
+                print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
+            press_enter()
+        elif pilih == "3":
+            menu_rekomendasi()
+        elif pilih == "4":
+            df = load_makanan()
+            if df.empty:
+                print("Belum ada makanan.")
+                press_enter()
+                continue
+            print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
+            pilih_idx = input("Masukkan index makanan yang ingin dipesan (pisah koma untuk beberapa): ").strip()
+            
 def menu_mitra(user):
     while True:
         clear_screen()
@@ -64,6 +84,7 @@ def main():
         else:
             print("Pilihan tidak valid.")
             press_enter()
+
 
 
 
