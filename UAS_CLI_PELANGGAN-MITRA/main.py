@@ -51,7 +51,13 @@ def menu_pelanggan(user):
             total = 0
             for idx in indices:
                 if idx in df.index:
-                    qty = safe_int(input(f"Jumlah untuk '{df.at[idx,'nama']}' : "), 1)
+                    while True:
+                        qty = input(f"Jumlah untuk '{df.at[idx,'nama']}' : ").strip()
+                        if qty.isdigit():
+                            qty = int(qty)
+                            if qty > 0:
+                                break
+                        print("Jumlah harus valid dan tidak boleh kosong")
                     harga = int(df.at[idx,'harga'])
                     subtotal = harga * qty
                     order_lines.append((df.at[idx,'nama'], df.at[idx,'restoran'], qty, harga, subtotal))
@@ -207,4 +213,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
