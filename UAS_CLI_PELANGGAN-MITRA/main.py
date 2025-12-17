@@ -17,6 +17,7 @@ def menu_pelanggan(user):
         print("4. Order Makanan (simulasi)")
         print("0. Logout")
         pilih = input("Pilih: ").strip()
+        
         if pilih == "1":
             print(f"\nProfil: {user}")
             press_enter()
@@ -37,6 +38,29 @@ def menu_pelanggan(user):
                 continue
             print(df[["nama","restoran","kalori","harga"]].to_string(index=True))
             pilih_idx = input("Masukkan index makanan yang ingin dipesan (pisah koma untuk beberapa): ").strip()
+            if not pilih_idx:
+                continue
+            try:
+                indices = [int(x.strip()) for x in pilih_idx.split(",")]
+            except:
+                print("Input index tidak valid.")
+                press_enter()
+                continue
+            order_lines = []
+            total = 0
+            for idx in indices:
+                if idx in df.index:
+                    qty = safe_int(input(f"Jumlah untuk '{df.at[idx,'nama']}' : "), 1)
+                    harga = int(df.at[idx,'harga'])
+                    subtotal = harga * qty
+                    order_lines.append((df.at[idx,'nama'], df.at[idx,'restoran'], qty, harga, subtotal))
+                    total += subtotal
+                else:
+                    print("Index", idx, "tidak ada, diabaikan.")
+            if not order_lines:
+                print("Tidak ada item valid dipesan.")
+                press_enter()
+                continue
             
 def menu_mitra(user):
     while True:
@@ -84,6 +108,7 @@ def main():
         else:
             print("Pilihan tidak valid.")
             press_enter()
+
 
 
 
