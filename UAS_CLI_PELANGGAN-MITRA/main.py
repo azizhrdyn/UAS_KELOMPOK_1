@@ -175,14 +175,23 @@ def input_password():
             return password
 
 def input_role():
-    while True:
+    kesempatan = 3
+    for i in range (0,3):
+        kesempatan = kesempatan-1
         role = input("Role (pelanggan/mitra): ").strip()
         if not role:
-            print("Role tidak boleh kosong.")
+            if kesempatan > 0:
+                print(f"Role tidak boleh kosong (sisa kesempatan: {kesempatan}).")
+            else:
+                print("Registrasi gagal.")
         elif not valid_role(role):
-            print("Role harus 'pelanggan' atau 'mitra'.")
+            if kesempatan > 0:
+                print(f"Role harus 'pelanggan' atau 'mitra' (sisa kesempatan: {kesempatan}).")
+            else:
+                print("Registrasi gagal.")
         else:
             return role
+
 
 def input_nama():
     while True:
@@ -240,6 +249,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
