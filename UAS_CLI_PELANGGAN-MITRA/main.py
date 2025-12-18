@@ -194,12 +194,20 @@ def input_role():
 
 
 def input_nama():
-    while True:
+    kesempatan = 3
+    for i in range (0,3):
+        kesempatan = kesempatan-1
         nama = input("Nama lengkap: ").strip()
         if not nama:
-            print("Nama tidak boleh kosong.")
+            if kesempatan > 0:
+                print(f"Password tidak boleh kosong (sisa kesempatan: {kesempatan}).")
+            else:
+                print("Registrasi gagal.")
         elif not valid_name(nama):
-            print("Nama harus mengandung huruf.")
+            if kesempatan > 0:
+                print(f"Nama harus mengandung huruf (sisa kesempatan: {kesempatan}).")
+            else:
+                print("Registrasi gagal.")
         else:
             return nama
 
@@ -249,6 +257,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
