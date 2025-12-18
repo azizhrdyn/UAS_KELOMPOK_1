@@ -157,12 +157,20 @@ def input_username():
                 return username
 
 def input_password():
-    while True:
+    kesempatan = 3
+    for i in range (0,3):
+        kesempatan = kesempatan-1
         password = input("Password: ").strip()
         if not password:
-            print("Password tidak boleh kosong.")
+            if kesempatan > 0:
+                print(f"Password tidak boleh kosong (sisa kesempatan: {kesempatan}).")
+            else:
+                print("Registrasi gagal.")
         elif not valid_password(password):
-            print("Password minimal 8 karakter dan kombinasi huruf & angka.")
+            if kesempatan > 0:
+                print(f"Password minimal 8 karakter dan kombinasi huruf & angka (sisa kesempatan: {kesempatan}).")
+            else:
+                print("Registrasi gagal.")
         else:
             return password
 
@@ -232,5 +240,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
