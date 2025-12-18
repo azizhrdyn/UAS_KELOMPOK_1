@@ -234,18 +234,24 @@ def main():
             clear_screen()
             print("=== REGISTER USER ===")
 
-            username = input_username()
-            password = input_password()
-            role = input_role()
-            nama = input_nama()
+            while True:
+                username = input_username() 
+                if not username:
+                    break
+                password = input_password()
+                if not password:
+                    break
+                role = input_role()
+                if not role:
+                    break
+                nama = input_nama()
+                if not nama:
+                    break
 
-            success = register_user(username, password, role, nama)
-
-            if success:
-                print("Registrasi berhasil. Silakan login.")
-            else:
-                print("Registrasi gagal.")
-
+                success = register_user(username, password, role, nama)
+                if success:
+                    print("Registrasi berhasil. Silakan login.")
+                    break
             press_enter()
 
         elif pilih == "0":
@@ -257,6 +263,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
