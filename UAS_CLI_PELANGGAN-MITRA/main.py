@@ -212,6 +212,8 @@ def main():
                     menu_pelanggan(user)
                 elif user["role"] == "mitra":
                     menu_mitra(user)
+                elif user["role"] == "admin":
+                    menu_admin(user)
 
         elif pilih == "2":
             clear_screen()
@@ -245,5 +247,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
