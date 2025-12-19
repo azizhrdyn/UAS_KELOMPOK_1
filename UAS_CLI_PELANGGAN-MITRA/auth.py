@@ -43,10 +43,13 @@ def login():
     "nama": user["nama"]
     }
 
-def register_user(username, password, role, nama):
+def register_user(username, password, role, nama, allow_admin=False):
     users = load_users()
 
     if username in users:
+        return False
+
+    if role == "admin" and not allow_admin:
         return False
 
     with open(FILE_USER, mode="a", newline="", encoding="utf-8") as file:
@@ -66,7 +69,8 @@ def valid_password(password):
     return len(password) >= 8 and any(c.isdigit() for c in password) and any(c.isalpha() for c in password)
 
 def valid_role(role):
-    return role in ["pelanggan", "mitra"]
+    return role in ["pelanggan", "mitra", "admin"]
 
 def valid_name(nama):
     return any(c.isalpha() for c in nama)
+
