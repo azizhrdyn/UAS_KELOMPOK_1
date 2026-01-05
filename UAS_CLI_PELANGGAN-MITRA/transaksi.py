@@ -6,8 +6,21 @@ import csv
 from pathlib import Path
 
 PENJUALAN_CSV = Path("penjualan.csv")
+USER_CSV = Path("user.csv")
 
 EWALLETS = ["Dana", "ShopeePay", "OVO", "GoPay", "PayPal", "LinkAja"]
+
+def get_alamat_tersimpan(username):
+    if not USER_CSV.exists():
+        return None
+
+    with open(USER_CSV, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["username"] == username:
+                alamat = row.get("alamat", "").strip()
+                return alamat if alamat else None
+    return None
 
 def ensure_penjualan_csv():
     if not PENJUALAN_CSV.exists():
@@ -15,7 +28,46 @@ def ensure_penjualan_csv():
             writer = csv.writer(f)
             writer.writerow(["nama_makanan", "restoran", "qty", "harga", "subtotal"])
 
-def order_makanan():
+def input_alamat_pengiriman():
+    for kesempatan in range(3):
+        alamat = input("Masukkan alamat pengiriman: ").strip()
+        if alamat:
+            return alamat
+        else:
+            print(f"Alamat tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+
+    print("Gagal input alamat.")
+    press_enter()
+    return None
+
+def pilih_alamat(alamat_tersimpan):
+    print("\nPilih alamat pengiriman:")
+    print("1. Gunakan alamat tersimpan")
+    print("2. Input alamat baru")
+
+    for kesempatan in range(3):
+        pilih = input("Pilih opsi (1/2): ").strip()
+
+        if pilih == "1":
+            if alamat_tersimpan:
+                print("Menggunakan alamat tersimpan.")
+                return alamat_tersimpan
+            else:
+                print("Belum ada alamat tersimpan.")
+                press_enter()
+                return None
+
+        elif pilih == "2":
+            return input_alamat_pengiriman()
+
+        else:
+            print(f"Pilihan tidak valid! (sisa kesempatan: {2 - kesempatan})")
+
+    print("Gagal memilih alamat.")
+    press_enter()
+    return None
+
+def order_makanan(user):
     df = load_makanan()
     if df.empty:
         print("Belum ada makanan.")
@@ -44,14 +96,22 @@ def order_makanan():
             if stok <= 0:
                 continue
 
-            while True:
-                qty = input(f"Jumlah '{df.at[idx,'nama']}' : ").strip()
-                if qty.isdigit() and 0 < int(qty) <= stok:
-                    qty = int(qty)
+            qty = None
+            for kesempatan in range(3):
+                qty_input = input(f"Jumlah '{df.at[idx,'nama']}' : ").strip()
+            
+                if not qty_input:
+                    print(f"Jumlah tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                elif qty_input.isdigit() and 0 < int(qty_input) <= stok:
+                    qty = int(qty_input)
                     break
                 else:
-                    print(f"Jumlah harus berupa angka antara 1 dan {stok}.")
-
+                    print(f"Jumlah harus berupa angka antara 1 dan {stok} berdasarkan jumlah stok yang tersedia. (sisa kesempatan: {2 - kesempatan}).")
+            
+            if qty is None:
+                print("Gagal menambahkan makanan ke pesanan.")
+                continue
+                
             harga = int(df.at[idx,'harga'])
             subtotal = harga * qty
 
@@ -62,12 +122,20 @@ def order_makanan():
         print("Tidak ada item valid.")
         press_enter()
         return
+        
+    username_login = user["username"]
+    alamat_tersimpan = get_alamat_tersimpan(username_login)
+    
+    alamat = pilih_alamat(alamat_tersimpan)
+    if alamat is None:
+        return
 
     clear_screen()
     print("\n=== Ringkasan Order ===")
     for o in order_lines:
         print(f"{o[1]} ({o[2]}) x{o[3]} - Rp{o[5]}")
     print("Total: Rp", total)
+    print(f"Alamat Pengiriman: {alamat}")
     
     for kesempatan in range(3):
         konfirm = input("Lanjut ke pembayaran? (y/n): ").strip().lower()
@@ -140,9 +208,10 @@ def simulasi_pembayaran(total):
                 print("Pembayaran dibatalkan.")
                 press_enter()
                 return False
+                
         for kesempatan in range(3):
             ident = input(f"Masukkan nomor/ID e-wallet {metode} (simulasi): ").strip()
-            if ident:
+            if ident.isdigit() and len(ident) >= 10:
                 clear_screen()
                 print("Memproses pembayaran", end="", flush=True)
                 for _ in range(3):
@@ -150,8 +219,10 @@ def simulasi_pembayaran(total):
                     print(".", end="", flush=True)
                 print("\nPembayaran berhasil. Terima kasih atas pesanan Anda!")
                 return True
-            else:
+            elif not ident:
                 print(f"ID e-wallet tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+            else:
+                print(f"ID e-wallet harus berupa angka dan minimal 10 digit! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
                     print("Pembayaran dibatalkan.")
                     press_enter()

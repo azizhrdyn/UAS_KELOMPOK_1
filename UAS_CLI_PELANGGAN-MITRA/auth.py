@@ -234,37 +234,45 @@ def get_profil_dasar(username):
                 }
 
 def get_profil_lengkap(username):
-    with open("user.csv", "r") as file:
-        for line in file:
-            data = line.strip().split(",")
-            while len(data) < 10:
-                data.append("")
-            if data[0] == username:
+    with open("user.csv", newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["username"] == username:
                 return {
-                    "email": data[6],
-                    "no_hp": data[7],
-                    "alamat": data[8],
-                    "jenis_kelamin": data[9]
+                    "email": row.get("email", ""),
+                    "no_hp": row.get("no_hp", ""),
+                    "alamat": row.get("alamat", ""),
+                    "jenis_kelamin": row.get("jenis_kelamin", "")
                 }
 
 def edit_profil_lengkap(username, profil_baru):
-    users = []
+    rows = []
 
-    with open("user.csv", "r") as file:
-        for line in file:
-            data = line.strip().split(",")
-            while len(data) < 10:
-                data.append("")
-            if data[0] == username:
-                data[6] = profil_baru["email"]
-                data[7] = profil_baru["no_hp"]
-                data[8] = profil_baru["alamat"]
-                data[9] = profil_baru["jenis_kelamin"]
-            users.append(data)
+    fieldnames = [
+        "username",
+        "password",
+        "role",
+        "nama",
+        "toko",
+        "status",
+        "email",
+        "no_hp",
+        "alamat",
+        "jenis_kelamin"
+    ]
 
-    with open("user.csv", "w") as file:
-        for u in users:
-            file.write(",".join(u) + "\n")
+    with open("user.csv", newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["username"] == username:
+                for key in profil_baru:
+                    row[key] = profil_baru[key]
+            rows.append(row)
+
+    with open("user.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
             
 def get_user_by_username(username):
     with open("user.csv", "r") as file:
@@ -356,3 +364,13 @@ def valid_role(role):
 
 def valid_name(nama):
     return any(c.isalpha() for c in nama)
+    
+def valid_email(email):
+    allowed_domains = (
+        "@gmail.com",
+        "@yahoo.com",
+        "@outlook.com",
+        "@hotmail.com",
+        "@icloud.com"
+    )
+    return email.endswith(allowed_domains)

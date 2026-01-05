@@ -2,7 +2,7 @@ from utils import clear_screen, press_enter
 from database_makanan import load_makanan, linear_search_makanan
 from rekomendasi_makanan import menu_rekomendasi
 from transaksi import order_makanan
-from auth import get_profil_lengkap, edit_profil_lengkap, get_user_by_username
+from auth import get_profil_lengkap, edit_profil_lengkap, get_user_by_username, valid_email
 
 def menu_pelanggan(user):
     while True:
@@ -47,10 +47,35 @@ def menu_pelanggan(user):
                 clear_screen()
                 print("=== EDIT DATA DIRI ===")
         
-                email = input(f"Email [{data['email']}]: ") or data["email"]
-                no_hp = input(f"No HP [{data['no_hp']}]: ") or data["no_hp"]
+                while True:
+                    email = input(f"Email [{data['email']}]: ").strip() or data["email"]
+                    if valid_email(email):
+                        data["email"] = email
+                        break
+                    else:
+                        print("Email tidak valid! \nGunakan email dengan domain @gmail.com, @yahoo.com, @outlook.com, @hotmail.com, atau @icloud.com.")
+                
+                for kesempatan in range(3):
+                    no_hp = input(f"No HP [{data['no_hp']}]: ").lower().strip() or data["no_hp"]
+                    if not no_hp:
+                        print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                    elif no_hp.isdigit() and len(no_hp) >= 10:
+                        break
+                    else:
+                        print(f"No HP harus berupa angka dan minimal 10 digit! (sisa kesempatan: {2 - kesempatan})")
+                    
                 alamat = input(f"Alamat [{data['alamat']}]: ") or data["alamat"]
-                jk = input(f"Jenis Kelamin [{data['jenis_kelamin']}]: ") or data["jenis_kelamin"]
+                for kesempatan in range(3):
+                    jk = input(f"Jenis Kelamin (perempuan/laki-laki) [{data['jenis_kelamin']}]: ").lower().strip() or data["jenis_kelamin"]
+                
+                    if not jk:
+                        print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                    elif jk == "perempuan":
+                        break
+                    elif jk == "laki-laki":
+                        break
+                    else:
+                        print(f"Pilih 'perempuan' atau 'laki-laki'! (sisa kesempatan: {2 - kesempatan})")
         
                 edit_profil_lengkap(user["username"], {
                     "email": email,
@@ -94,7 +119,12 @@ def menu_pelanggan(user):
                         .to_string(index=False)
                     )
             
-            press_enter()
+                press_enter()
+            elif sub == "2":
+                continue
+            else:
+                print("Pilihan tidak valid.")
+                press_enter()
 
         elif pilih == "3":
             clear_screen()
@@ -102,7 +132,7 @@ def menu_pelanggan(user):
 
         elif pilih == "4":
             clear_screen()
-            order_makanan()
+            order_makanan(user)
 
         elif pilih == "0":
             break
