@@ -213,7 +213,10 @@ def manajemen_data():
                         return
 
             if kalori.isdigit() and harga.isdigit() and stok.isdigit():
-                tambah_makanan(nama, restoran, int(kalori), int(harga), int(stok))
+                kalori = int(kalori)
+                harga = int(harga)
+                stok = int(stok)
+                tambah_makanan(nama, restoran, kalori, harga, stok)
             press_enter()
 
         elif pilih == "2":
@@ -295,14 +298,13 @@ def manajemen_data():
                         print("Update makanan dibatalkan.")
                         press_enter()
                         return
-
+            
             update_makanan(
-                idx,
-                nama_final,
-                restoran_final,
-                int(kalori) if kalori.isdigit() else None,
-                int(harga) if harga.isdigit() else None,
-                int(stok) if stok.isdigit() else None
+            idx,
+            nama=nama_final,
+            kalori=kalori,
+            harga=harga,
+            stok=stok
             )
             press_enter()
 
