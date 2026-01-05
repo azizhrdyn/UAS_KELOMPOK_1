@@ -77,7 +77,6 @@ def menu_rekomendasi():
             break
         
         else:
-            clear_screen()
             print("Pilihan tidak valid!")
             press_enter()
             break
