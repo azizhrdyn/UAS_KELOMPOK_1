@@ -31,6 +31,8 @@ def update_makanan(idx, nama=None, kalori=None, harga=None, stok=None):
     df = load_makanan()
     if idx not in df.index:
         return
+    else:
+        idx = int(idx)
     if nama is not None:
         df.at[idx, "nama"] = nama
     if kalori is not None:
@@ -47,11 +49,15 @@ def hapus_makanan(df, baris_asli):
     return df
 
 def linear_search_makanan(df, keyword):
+    keyword = keyword.lower()
     nama_array = np.array(df["nama"].str.lower())
     hasil_index = []
 
     for i in range(len(nama_array)):
-        if keyword.lower() in nama_array[i]:
-            hasil_index.append(i)
-
+        kata_kata = nama_array[i].split()
+        for kata in kata_kata:
+            if kata.startswith(keyword):
+                hasil_index.append(i)
+                break
+                
     return df.iloc[hasil_index]
