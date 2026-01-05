@@ -89,6 +89,8 @@ def manajemen_user():
                         print(f"Username harus alfanumerik dan minimal terdiri dari 4 karakter (sisa kesempatan: {2 - kesempatan}).")
                     elif username in users:
                         print(f"Username sudah terdaftar (sisa kesempatan: {2 - kesempatan}).")
+                    else:
+                        break 
                     if kesempatan == 2:
                         print("Registrasi gagal.")
                         press_enter()
@@ -100,6 +102,8 @@ def manajemen_user():
                         print(f"Password tidak boleh kosong (sisa kesempatan: {2 - kesempatan}).")
                     elif not valid_password(password):
                         print(f"Password minimal 8 karakter dan kombinasi huruf & angka (sisa kesempatan: {2 - kesempatan}).")
+                    else:
+                        break
                     if kesempatan == 2:
                         print("Registrasi gagal.")
                         press_enter()
@@ -111,6 +115,8 @@ def manajemen_user():
                         print(f"Nama tidak boleh kosong (sisa kesempatan: {2 - kesempatan}).")
                     elif not valid_name(nama):
                         print(f"Nama hanya boleh mengandung alfabet dan spasi (sisa kesempatan: {2 - kesempatan}).")
+                    else:
+                        break
                     if kesempatan == 2:
                         print("Registrasi gagal.")
                         press_enter()
@@ -244,6 +250,7 @@ def manajemen_data():
                             data_lama = df.loc[idx]
                             nama_lama = data_lama["nama"]
                             restoran_lama = data_lama["restoran"]
+                            break
                     except ValueError:
                         print(f"Index tidak valid, masukkan angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
@@ -371,7 +378,9 @@ def manajemen_data():
                         else:   
                             df = df.drop(idx).reset_index(drop=True)
                             save_makanan(df)
+                            print("Makanan berhasil dihapus")
                             press_enter()
+                            break
                     except ValueError:
                         print(f"Index tidak valid, masukkan angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:

@@ -82,7 +82,6 @@ def kelola_menu(user):
             nama = input("Nama makanan: ").strip()
             for kesempatan in range(3):
                 if nama:
-                    # Cek sudah ada apa belum di toko walaupun huruf besar kecilnya beda tetap di hitung sama
                     if nama.lower() in toko_df["nama"].str.lower().values:
                         print(f"Nama makanan '{nama}' sudah ada di toko Anda! (sisa kesempatan: {2 - kesempatan})")
                         if kesempatan < 2:
@@ -155,37 +154,30 @@ def kelola_menu(user):
                     press_enter()
                     return
 
-            if kalori.isdigit() and harga.isdigit() and stok.isdigit():
+            if kalori() and harga() and stok():
                 tambah_makanan(nama, user["toko"], int(kalori), int(harga), int(stok))
             press_enter()
 
         elif pilih == "2":
-            # Tampilkan daftar toko_df untuk pilih index
             print(toko_df[["nama", "kalori", "harga", "stok"]].assign(no=range(1, len(toko_df) + 1))[["no", "nama", "kalori", "harga", "stok"]].to_string(index=False))
-            #assign adalah untuk menambahkan kolom no sebagai index yang ditampilkan ke user
-            #to_string untuk menampilkan dataframe sebagai string tanpa index asli
-
+            idx = input("Index makanan: ").strip()
             if idx.isdigit():
                 idx = int(idx) - 1
                 if idx < 0 or idx >= len(toko_df):
                     print("Index tidak ditemukan.")
                     press_enter()
-                    continue  # Kembali ke menu, bukan return
-                #idx adalah index yang dipilih user dikurangi 1 untuk menyesuaikan dengan index 0-based
+                    continue  
             else:
                 print("Index tidak valid, masukkan angka.")
                 press_enter()
                 continue
             
-            # Dapatkan baris asli di df utama
             baris_asli = toko_df.loc[idx, "__idx"]
             
-            # Input nama baru dengan cek duplikat (case-insensitive, exclude yang sedang diupdate)
             nama_lama = df.at[baris_asli, "nama"]
             nama = input("Nama baru: ").strip()
             for kesempatan in range(3):
                 if nama:
-                    # Cek duplikat di df utuh, case-insensitive, tapi abaikan nama lama
                     nama_lower_list = df["nama"].str.lower().values
                     if nama.lower() in nama_lower_list and nama.lower() != nama_lama.lower():
                         print(f"Nama makanan '{nama}' sudah ada di toko Anda! (sisa kesempatan: {2 - kesempatan})")
@@ -206,7 +198,6 @@ def kelola_menu(user):
                         press_enter()
                         continue
             
-            # Input kalori baru
             kalori = input("Kalori baru: ").strip()
             for kesempatan in range(3):
                 if kalori and kalori.isdigit():
@@ -219,8 +210,7 @@ def kelola_menu(user):
                         print("Update dibatalkan.")
                         press_enter()
                         continue
-            
-            # Input harga baru
+          
             harga = input("Harga baru: ").strip()
             for kesempatan in range(3):
                 if harga and harga.isdigit():
@@ -234,7 +224,6 @@ def kelola_menu(user):
                         press_enter()
                         continue
             
-            # Input stok baru
             stok = input("Stok baru: ").strip()
             for kesempatan in range(3):
                 if stok and stok.isdigit():
@@ -248,13 +237,11 @@ def kelola_menu(user):
                         press_enter()
                         continue
             
-            # Update df utama langsung
             df.at[baris_asli, "nama"] = nama
             df.at[baris_asli, "kalori"] = int(kalori)
             df.at[baris_asli, "harga"] = int(harga)
             df.at[baris_asli, "stok"] = int(stok)
             
-            # Simpan df utama
             save_makanan(df)
             print("Makanan berhasil di-update.")
             press_enter()
@@ -390,4 +377,5 @@ def menu_mitra(user):
             laporan_penjualan(user)
         elif pilih == "0":
             break
+
 
