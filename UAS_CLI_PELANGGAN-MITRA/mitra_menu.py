@@ -117,31 +117,43 @@ def kelola_menu(user):
                         press_enter()
                         return
                         
-            harga = input("Harga: ").strip()
             for kesempatan in range(3):
-                if harga:
-                    break
-                else:
+                harga = input("Harga: ").strip()
+                if harga == "":
                     print(f"Harga tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    if kesempatan < 2:
-                        harga = input("Harga: ").strip()
+                elif harga.isdigit():
+                    if harga == "0":
+                        print(f"Harga harus lebih dari 0! (sisa kesempatan: {2 - kesempatan})")
+                    elif harga < "0":
+                        print(f"Harga harus lebih dari 0! (sisa kesempatan: {2 - kesempatan})")
                     else:
-                        print("Penambahan menu dibatalkan.")
-                        press_enter()
-                        return
+                        harga = int(harga)
+                        break
+                elif not harga.isdigit():
+                    print(f"Harga harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                if kesempatan == 2:
+                    print("Penambahan menu dibatalkan.")
+                    press_enter()
+                    return
 
-            stok = input("Stok: ").strip()
             for kesempatan in range(3):
-                if stok:
-                    break
-                else:
+                stok = input("Stok: ").strip()
+                if stok == "":
                     print(f"Stok tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    if kesempatan < 2:
-                        stok = input("Stok: ").strip()
+                elif stok.isdigit():
+                    if stok <= "0":
+                        print(f"Stok tidak boleh negatif! (sisa kesempatan: {2 - kesempatan})")
+                    elif stok < "0":
+                        print(f"Stok tidak boleh negatif! (sisa kesempatan: {2 - kesempatan})")
                     else:
-                        print("Penambahan menu dibatalkan.")
-                        press_enter()
-                        return
+                        stok = int(stok)
+                        break
+                elif not stok.isdigit():
+                    print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                if kesempatan == 2:
+                    print("Penambahan menu dibatalkan.")
+                    press_enter()
+                    return
 
             if kalori.isdigit() and harga.isdigit() and stok.isdigit():
                 tambah_makanan(nama, user["toko"], int(kalori), int(harga), int(stok))
@@ -317,35 +329,43 @@ def kelola_stok(user):
     print("Stok berhasil diperbarui.")
     press_enter()
 
-
 def laporan_penjualan(user):
     clear_screen()
 
-    if not PENJUALAN_CSV.exists():
-        print("Belum ada penjualan.")
-        press_enter()
-        return
-    
-    with open(PENJUALAN_CSV, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        if "restoran" not in reader.fieldnames:
-            print("Format data penjualan tidak valid.")
-            press_enter()
-            return
+    df = load_makanan()
+    toko_df = df[df["restoran"] == user["toko"]].copy()
 
-        data = [r for r in reader if r["restoran"] == user["toko"]]
-
-    if not data:
-        print("Belum ada penjualan.")
+    if toko_df.empty:
+        print("Belum ada menu di toko Anda.")
         press_enter()
         return
 
-    total = 0
-    for r in data:
-        print(f"{r['nama_makanan']} x{r['qty']} = Rp{r['subtotal']}")
-        total += int(r["subtotal"])
+    sales_qty = {}  
+    if PENJUALAN_CSV.exists():
+        with open(PENJUALAN_CSV, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            if "nama_makanan" not in reader.fieldnames or "restoran" not in reader.fieldnames or "qty" not in reader.fieldnames:
+                print("Format data penjualan tidak valid.")
+                press_enter()
+                return
+            for row in reader:
+                if row["restoran"] == user["toko"]:
+                    menu_name = row["nama_makanan"]
+                    qty = int(row["qty"])
+                    sales_qty[menu_name] = sales_qty.get(menu_name, 0) + qty  
+    print("Laporan Penjualan Toko Anda:")
+    print("-" * 50)
+    total_penjualan = 0
+    for _, row in toko_df.iterrows():
+        menu_name = row["nama"]  
+        harga = int(row["harga"]) 
+        qty_terjual = sales_qty.get(menu_name, 0)  
+        pendapatan = qty_terjual * harga
+        total_penjualan += pendapatan
+        print(f"{menu_name}: {qty_terjual} terjual, Pendapatan: Rp{pendapatan}")
 
-    print("\nTotal Penjualan: Rp", total)
+    print("-" * 50)
+    print(f"Total Pendapatan: Rp{total_penjualan}")
     press_enter()
 
 def menu_mitra(user):
@@ -370,3 +390,4 @@ def menu_mitra(user):
             laporan_penjualan(user)
         elif pilih == "0":
             break
+
