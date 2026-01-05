@@ -127,7 +127,6 @@ def simulasi_pembayaran(total):
         print(f"Metode pembayaran terpilih: {metode}")
         for kesempatan in range(3):
             konfirm = input("Lanjutkan pembayaran? (y/n): ").strip().lower()
-        
             if not konfirm:
                 print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
             elif konfirm == "y":
@@ -137,7 +136,6 @@ def simulasi_pembayaran(total):
                 return False
             else:
                 print(f"Pilih 'y' atau 'n'! (sisa kesempatan: {2 - kesempatan})")
-        
             if kesempatan == 2:
                 print("Pembayaran dibatalkan.")
                 press_enter()
@@ -145,17 +143,16 @@ def simulasi_pembayaran(total):
         for kesempatan in range(3):
             ident = input(f"Masukkan nomor/ID e-wallet {metode} (simulasi): ").strip()
             if ident:
-                break
+                clear_screen()
+                print("Memproses pembayaran", end="", flush=True)
+                for _ in range(3):
+                    time.sleep(1)
+                    print(".", end="", flush=True)
+                print("\nPembayaran berhasil. Terima kasih atas pesanan Anda!")
+                return True
             else:
                 print(f"ID e-wallet tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
                     print("Pembayaran dibatalkan.")
                     press_enter()
                     return False
-    clear_screen()
-    print("Memproses pembayaran", end="", flush=True)
-    for _ in range(3):
-        time.sleep(1)
-        print(".", end="", flush=True)
-    print("\nPembayaran berhasil. Terima kasih atas pesanan Anda!")
-    return True

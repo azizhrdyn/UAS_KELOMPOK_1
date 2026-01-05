@@ -66,11 +66,14 @@ def kelola_menu(user):
                         print(f"Nama makanan '{nama}' sudah ada di toko Anda! (sisa kesempatan: {2 - kesempatan})")
                         if kesempatan < 2:
                             nama = input("Nama makanan: ").strip()
+                        elif nama == "":
+                            print("Nama makanan tidak boleh kosong!")
+                            press_enter()
+                            return
                         else:
                             print("Penambahan menu dibatalkan.")
                             press_enter()
                             return
-                    break
                 else:
                     print(f"Nama makanan tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
                     if kesempatan < 2:
