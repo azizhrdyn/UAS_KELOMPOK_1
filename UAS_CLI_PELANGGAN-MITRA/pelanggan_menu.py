@@ -88,6 +88,11 @@ def menu_pelanggan(user):
         
                 print("\nData diri berhasil diperbarui.")
                 press_enter()
+            elif sub == "2":
+                continue
+            else:
+                print("Pilihan tidak valid.")
+                press_enter()
 
         elif pilih == "2":
             clear_screen()
