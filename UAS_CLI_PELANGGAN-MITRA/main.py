@@ -1,4 +1,3 @@
-
 from utils import clear_screen, press_enter, exit_program
 from auth import login, register_user, valid_username, valid_password, valid_name, input_nama, input_username, input_password, input_role, input_toko
 from pelanggan_menu import menu_pelanggan
@@ -60,3 +59,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
