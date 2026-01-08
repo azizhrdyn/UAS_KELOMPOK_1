@@ -30,13 +30,18 @@ def profil_toko(user):
         print("=== EDIT PROFIL TOKO ===")
 
         for kesempatan in range(3):
-            lokasi = input(f"Lokasi [{profil['lokasi']}]: ") or profil["lokasi"]
+            lokasi = input(f"Lokasi [{profil['lokasi']}]: ").strip()
             if not lokasi:
-                print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                print(f"Lokasi tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
             elif all(c.isalnum() or c in " .,/" for c in lokasi):
                 break
             else:
-                print(f"Lokasi toko hanya boleh berisi huruf, angka, spasi, titik, dan koma. (sisa kesempatan: {2 - kesempatan})")
+                print(f"Lokasi hanya boleh berisi huruf, angka, spasi, titik, dan koma. (sisa kesempatan: {2 - kesempatan})")
+            
+            if kesempatan == 2:
+                print("Edit profil dibatalkan.")
+                press_enter()
+                return
         
         for kesempatan in range(3):
             jam = input(f"Jam Operasional [{profil['jam_operasional']}]: ").strip() or profil["jam_operasional"]
@@ -382,3 +387,4 @@ def menu_mitra(user):
         elif pilih == "0":
             break
             
+
