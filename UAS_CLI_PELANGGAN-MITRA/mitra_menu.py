@@ -44,15 +44,20 @@ def profil_toko(user):
                 return
         
         for kesempatan in range(3):
-            jam = input(f"Jam Operasional [{profil['jam_operasional']}]: ").strip() or profil["jam_operasional"]
-        
+            jam = input(f"Jam Operasional [{profil['jam_operasional']}]: ").strip()
             pola = r"^(?:[01]\d|2[0-3])[:.][0-5]\d\s*[-–]\s*(?:[01]\d|2[0-3])[:.][0-5]\d$"
-        
-            if re.match(pola, jam):
+
+            if not jam:
+                print(f"Jam operasional tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+            elif re.match(pola, jam):
                 break
             else:
-                print(f"Format jam tidak valid! Contoh: 08.00 - 17.00 atau 08:00-17:00 "
-                      f"(sisa kesempatan: {2 - kesempatan})")
+                print(f"Format jam tidak valid! Contoh: 08.00 - 17.00 (sisa kesempatan: {2 - kesempatan})")
+
+            if kesempatan == 2:
+                print("Edit profil dibatalkan.")
+                press_enter()
+                return
         
         for kesempatan in range(3):
             desk = input(f"Deskripsi [{profil['deskripsi']}]: ") or profil["deskripsi"]
@@ -387,4 +392,5 @@ def menu_mitra(user):
         elif pilih == "0":
             break
             
+
 
