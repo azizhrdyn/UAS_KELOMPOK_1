@@ -3,6 +3,7 @@ from utils import press_enter, clear_screen
 import csv
 from pathlib import Path
 from auth import get_profil_toko, edit_profil_toko
+import re
 
 PENJUALAN_CSV = Path("penjualan.csv")
 
@@ -28,9 +29,34 @@ def profil_toko(user):
         clear_screen()
         print("=== EDIT PROFIL TOKO ===")
 
-        lokasi = input(f"Lokasi [{profil['lokasi']}]: ") or profil["lokasi"]
-        jam = input(f"Jam Operasional [{profil['jam_operasional']}]: ") or profil["jam_operasional"]
-        desk = input(f"Deskripsi [{profil['deskripsi']}]: ") or profil["deskripsi"]
+        for kesempatan in range(3):
+            lokasi = input(f"Lokasi [{profil['lokasi']}]: ") or profil["lokasi"]
+            if not lokasi:
+                print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+            elif all(c.isalnum() or c in " .,/" for c in lokasi):
+                break
+            else:
+                print(f"Lokasi toko hanya boleh berisi huruf, angka, spasi, titik, dan koma. (sisa kesempatan: {2 - kesempatan})")
+        
+        for kesempatan in range(3):
+            jam = input(f"Jam Operasional [{profil['jam_operasional']}]: ").strip() or profil["jam_operasional"]
+        
+            pola = r"^(?:[01]\d|2[0-3])[:.][0-5]\d\s*[-–]\s*(?:[01]\d|2[0-3])[:.][0-5]\d$"
+        
+            if re.match(pola, jam):
+                break
+            else:
+                print(f"Format jam tidak valid! Contoh: 08.00 - 17.00 atau 08:00-17:00 "
+                      f"(sisa kesempatan: {2 - kesempatan})")
+        
+        for kesempatan in range(3):
+            desk = input(f"Deskripsi [{profil['deskripsi']}]: ") or profil["deskripsi"]
+            if not desk:
+                print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+            elif all(c.isalnum() or c in " .,/" for c in desk):
+                break
+            else:
+                print(f"Deskripsi toko hanya boleh berisi huruf, angka, spasi, titik, dan koma. (sisa kesempatan: {2 - kesempatan})")
 
         edit_profil_toko(user["username"], {
             "lokasi": lokasi,
@@ -39,7 +65,15 @@ def profil_toko(user):
         })
 
         print("\nProfil toko berhasil diperbarui.")
-    press_enter()
+        press_enter()
+    elif sub == "2":
+        return
+    elif not sub:
+        print("Input tidak boleh kosong.")
+        press_enter()
+    else:
+        print("Pilihan tidak valid.")
+        press_enter()
 
 def kelola_menu(user):
     while True:
@@ -136,15 +170,18 @@ def kelola_menu(user):
             press_enter()
 
         elif pilih == "2":
+            df = load_makanan().reset_index(drop=True)
+            toko_df = df[df["restoran"] == user["toko"]]
+        
             idx = input("Index makanan: ").strip()
-            if idx.isdigit():
-                idx = int(idx) - 1
-                if idx < 0 or idx >= len(df):
-                    print("Index tidak ditemukan.")
-                    press_enter()
-                    return
-            else:
+            if not idx.isdigit():
                 print("Index tidak valid, masukkan angka.")
+                press_enter()
+                return
+        
+            idx = int(idx) - 1
+            if idx < 0 or idx >= len(toko_df):
+                print("Index tidak ditemukan.")
                 press_enter()
                 return
                 
@@ -208,13 +245,17 @@ def kelola_menu(user):
                         press_enter()
                         return
 
+            baris_asli = toko_df.index[idx]
+        
             update_makanan(
-                idx,
+                baris_asli,
                 nama if nama else None,
                 int(kalori) if kalori.isdigit() else None,
                 int(harga) if harga.isdigit() else None,
                 int(stok) if stok.isdigit() else None
             )
+        
+            print("Menu berhasil diperbarui.")
             press_enter()
 
         elif pilih == "3":
@@ -340,3 +381,4 @@ def menu_mitra(user):
             laporan_penjualan(user)
         elif pilih == "0":
             break
+            
