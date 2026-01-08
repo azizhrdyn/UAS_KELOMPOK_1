@@ -63,8 +63,16 @@ def menu_pelanggan(user):
                         break
                     else:
                         print(f"No HP harus berupa angka dan minimal 10 digit! (sisa kesempatan: {2 - kesempatan})")
-                    
-                alamat = input(f"Alamat [{data['alamat']}]: ") or data["alamat"]
+                
+                for kesempatan in range(3):
+                    alamat = input(f"Alamat [{data['alamat']}]: ") or data["alamat"]
+                    if not alamat:
+                        print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                    elif all(c.isalnum() or c in " .,/" for c in alamat):
+                        break
+                    else:
+                        print(f"Alamat hanya boleh berisi huruf, angka, spasi, titik, dan koma. (sisa kesempatan: {2 - kesempatan})")
+                
                 for kesempatan in range(3):
                     jk = input(f"Jenis Kelamin (perempuan/laki-laki) [{data['jenis_kelamin']}]: ").lower().strip() or data["jenis_kelamin"]
                 
@@ -90,6 +98,9 @@ def menu_pelanggan(user):
                 press_enter()
             elif sub == "2":
                 continue
+            elif not sub:
+                print("Input tidak boleh kosong.")
+                press_enter()
             else:
                 print("Pilihan tidak valid.")
                 press_enter()
@@ -145,3 +156,4 @@ def menu_pelanggan(user):
         else:
             print("Pilihan tidak valid.")
             press_enter()
+                    
