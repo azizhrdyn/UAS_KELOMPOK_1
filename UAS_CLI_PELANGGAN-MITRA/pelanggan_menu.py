@@ -47,13 +47,18 @@ def menu_pelanggan(user):
                 clear_screen()
                 print("=== EDIT DATA DIRI ===")
         
-                while True:
+               for kesempatan in range(3):
                     email = input(f"Email [{data['email']}]: ").strip() or data["email"]
                     if valid_email(email):
                         data["email"] = email
                         break
+                    elif not email:
+                        print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
                     else:
-                        print("Email tidak valid! \nGunakan email dengan domain @gmail.com, @yahoo.com, @outlook.com, @hotmail.com, atau @icloud.com.")
+                        print(f"Email tidak valid! \nGunakan email dengan domain @gmail.com, @yahoo.com, @outlook.com, @hotmail.com, atau @icloud.com. (sisa kesempatan: {2 - kesempatan})")
+                else:
+                    press_enter()
+                    return
                 
                 for kesempatan in range(3):
                     no_hp = input(f"No HP [{data['no_hp']}]: ").lower().strip() or data["no_hp"]
