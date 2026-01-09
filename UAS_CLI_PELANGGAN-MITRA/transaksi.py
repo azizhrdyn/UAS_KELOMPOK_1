@@ -174,18 +174,23 @@ def pilih_metode():
     print("\nPilih metode pembayaran (simulasi):")
     for i, m in enumerate(EWALLETS, start=1):
         print(f"{i}. {m}")
+    print("0. Batal")
     while True:
         pilih = input("Pilih metode (nomor): ").strip()
-        if pilih.isdigit():
-            idx = int(pilih) - 1
-            if 0 <= idx < len(EWALLETS):
-                return EWALLETS[idx]
-            elif pilih == "0":
-                print("Pembayaran dibatalkan.")
-                press_enter()
-                return None
-        else:
+        if pilih == "0":
+            print("Pembayaran dibatalkan.")
+            press_enter()
+            return None
+
+        if not pilih.isdigit():
             print("Pilihan tidak valid. Masukkan nomor yang sesuai atau 0 untuk batal.")
+            continue
+
+        idx = int(pilih) - 1
+        if 0 <= idx < len(EWALLETS):
+            return EWALLETS[idx]
+        else:
+            print(f"Pilihan di luar jangkauan. Masukkan angka antara 1 dan {len(EWALLETS)} atau 0 untuk batal.")
 
 def simulasi_pembayaran(total):
     metode = pilih_metode()
@@ -227,3 +232,4 @@ def simulasi_pembayaran(total):
                     print("Pembayaran dibatalkan.")
                     press_enter()
                     return False
+

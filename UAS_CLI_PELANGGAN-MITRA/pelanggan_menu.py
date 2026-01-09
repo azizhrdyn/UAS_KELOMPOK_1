@@ -36,65 +36,105 @@ def menu_pelanggan(user):
                 print(f"No HP         : {profil['no_hp']}")
                 print(f"Alamat        : {profil['alamat']}")
                 print(f"Jenis Kelamin : {profil['jenis_kelamin']}")
-        
-            print("\n1. Lengkapi / Edit Data Diri")
-            print("2. Kembali")
-            sub = input("Pilih: ").strip()
-        
-            if sub == "1":
-                data = get_profil_lengkap(user["username"])
-        
-                clear_screen()
-                print("=== EDIT DATA DIRI ===")
-        
-                while True:
-                    email = input(f"Email [{data['email']}]: ").strip() or data["email"]
-                    if valid_email(email):
-                        data["email"] = email
-                        break
-                    else:
-                        print("Email tidak valid! \nGunakan email dengan domain @gmail.com, @yahoo.com, @outlook.com, @hotmail.com, atau @icloud.com.")
-                
-                for kesempatan in range(3):
-                    no_hp = input(f"No HP [{data['no_hp']}]: ").lower().strip() or data["no_hp"]
-                    if not no_hp:
-                        print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    elif no_hp.isdigit() and len(no_hp) >= 10:
-                        break
-                    else:
-                        print(f"No HP harus berupa angka dan minimal 10 digit! (sisa kesempatan: {2 - kesempatan})")
+                            
+                print("\n1. Lengkapi / Edit Data Diri")
+                print("2. Kembali")
+                sub = input("Pilih: ").strip()
+            
+                if sub == "1":
+                    data = get_profil_lengkap(user["username"])
+                    batal = False
+                    clear_screen()
                     
-                alamat = input(f"Alamat [{data['alamat']}]: ") or data["alamat"]
-                for kesempatan in range(3):
-                    jk = input(f"Jenis Kelamin (perempuan/laki-laki) [{data['jenis_kelamin']}]: ").lower().strip() or data["jenis_kelamin"]
+                    print("=== EDIT DATA DIRI ===")
+                    
+                    for kesempatan in range(3):
+                        email = input(f"Email [{data['email']}]: ").strip() or data["email"]
+                        if valid_email(email):
+                            data["email"] = email
+                            break
+                        elif not email:
+                            print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            print(f"Email tidak valid! \nGunakan email dengan domain @gmail.com, @yahoo.com, @outlook.com, @hotmail.com, atau @icloud.com. (sisa kesempatan: {2 - kesempatan})")
+                        if kesempatan == 2:
+                            print("Pengubahan status user dibatalkan.")
+                            press_enter()
+                            batal = True
+                    if batal:
+                        continue
+                        
+                    for kesempatan in range(3):
+                        no_hp = input(f"No HP [{data['no_hp']}]: ").lower().strip() or data["no_hp"]
+                        if not no_hp:
+                            print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                        elif no_hp.isdigit() and len(no_hp) >= 10:
+                            break
+                        else:
+                            print(f"No HP harus berupa angka dan minimal 10 digit! (sisa kesempatan: {2 - kesempatan})")
+                        if kesempatan == 2:
+                            print("Pengubahan status user dibatalkan.")
+                            press_enter()
+                            batal = True
+                    if batal:
+                        continue
+                        
+                    for kesempatan in range(3):
+                        alamat = input(f"Alamat [{data['alamat']}]: ") or data["alamat"]
+                        if not alamat:
+                            print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                        elif all(c.isalnum() or c in " .,/" for c in alamat):
+                            break
+                        else:
+                            print(f"Alamat hanya boleh berisi huruf, angka, spasi, titik, dan koma. (sisa kesempatan: {2 - kesempatan})")
+                        if kesempatan == 2:
+                            print("Pengubahan status user dibatalkan.")
+                            press_enter()
+                            batal = True
+                    if batal:
+                        continue
+                    
+                    for kesempatan in range(3):
+                        jk = input(f"Jenis Kelamin (perempuan/laki-laki) [{data['jenis_kelamin']}]: ").lower().strip() or data["jenis_kelamin"]
+                    
+                        if not jk:
+                            print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+                        elif jk == "perempuan":
+                            break
+                        elif jk == "laki-laki":
+                            break
+                        else:
+                            print(f"Pilih 'perempuan' atau 'laki-laki'! (sisa kesempatan: {2 - kesempatan})")
+                        if kesempatan == 2:
+                            print("Pengubahan status user dibatalkan.")
+                            press_enter()
+                            batal = True
+                    if batal:
+                        continue
                 
-                    if not jk:
-                        print(f"Input tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    elif jk == "perempuan":
-                        break
-                    elif jk == "laki-laki":
-                        break
-                    else:
-                        print(f"Pilih 'perempuan' atau 'laki-laki'! (sisa kesempatan: {2 - kesempatan})")
-        
-                edit_profil_lengkap(user["username"], {
-                    "email": email,
-                    "no_hp": no_hp,
-                    "alamat": alamat,
-                    "jenis_kelamin": jk
-                })
-        
-                user.update(get_user_by_username(user["username"]))
-        
-                print("\nData diri berhasil diperbarui.")
-                press_enter()
-            elif sub == "2":
-                continue
-            else:
-                print("Pilihan tidak valid.")
-                press_enter()
+                    edit_profil_lengkap(user["username"], {
+                        "email": email,
+                        "no_hp": no_hp,
+                        "alamat": alamat,
+                        "jenis_kelamin": jk
+                    })
+            
+                    user.update(get_user_by_username(user["username"]))
+            
+                    print("\nData diri berhasil diperbarui.")
+                    press_enter()
+                
+                elif sub == "2":
+                    continue
+                elif not sub:
+                    print("Input tidak boleh kosong.")
+                    press_enter()
+                else:
+                    print("Pilihan tidak valid.")
+                    press_enter()
 
         elif pilih == "2":
+            
             clear_screen()
             df = load_makanan()
             if df.empty:
