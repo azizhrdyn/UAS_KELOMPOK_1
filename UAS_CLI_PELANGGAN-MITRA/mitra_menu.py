@@ -59,7 +59,7 @@ def profil_toko(user):
                 press_enter()
                 return
         
-       for kesempatan in range(3):
+        for kesempatan in range(3):
             desk = input(f"Deskripsi [{profil['deskripsi']}]: ").strip()
             if not desk:
                 print(f"Deskripsi tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
@@ -167,14 +167,15 @@ def kelola_menu(user):
                 stok = input("Stok: ").strip()
                 if stok == "":
                     print(f"Stok tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                elif stok.isdigit():
-                    stok = int(stok)
-                    if stok < 0:
-                        print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
-                    else:
-                        break
-                elif not stok.isdigit():
-                    print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                else:
+                    try:
+                        stok = int(stok)
+                        if stok < 0:
+                            print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            break
+                    except ValueError:
+                        print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
                     print("Penambahan menu dibatalkan.")
                     press_enter()
@@ -185,6 +186,8 @@ def kelola_menu(user):
             press_enter()
 
         elif pilih == "2":
+            print("=== UPDATE DATA MAKANAN")
+            clear_screen()
             df = load_makanan().reset_index(drop=True)
             toko_df = df[df["restoran"] == user["toko"]]
         
@@ -195,7 +198,7 @@ def kelola_menu(user):
                 return
         
             idx = int(idx) - 1
-            if idx < 0 or idx >= len(toko_df):
+            if not (0 <= idx < len(toko_df)):
                 print("Index tidak ditemukan.")
                 press_enter()
                 return
@@ -203,12 +206,12 @@ def kelola_menu(user):
             nama = input("Nama baru: ").strip()
             for kesempatan in range(3):
                 if nama:
-                    if nama in toko_df["nama"].values and nama != toko_df.at[idx, "nama"]:
+                    if nama in toko_df["nama"].values and nama != toko_df.iloc[idx]["nama"]:
                         print(f"Nama makanan '{nama}' sudah ada di toko Anda! (sisa kesempatan: {2 - kesempatan})")
                         if kesempatan < 2:
                             nama = input("Nama makanan: ").strip()
                         else:
-                            print("Penambahan menu dibatalkan.")
+                            print("Update menu dibatalkan.")
                             press_enter()
                             return
                     break
@@ -217,63 +220,84 @@ def kelola_menu(user):
                     if kesempatan < 2:
                         nama = input("Nama makanan: ").strip()
                     else:
-                        print("Penambahan menu dibatalkan.")
+                        print("Update menu dibatalkan.")
                         press_enter()
                         return
                     
-            kalori = input("Kalori baru: ").strip()
             for kesempatan in range(3):
-                if kalori:
-                    break
-                else:
+                kalori = input("Kalori baru: ").strip()
+                if kalori == "":
                     print(f"Kalori tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    if kesempatan < 2:
-                        kalori = input("Kalori: ").strip()
-                    else:
-                        print("Penambahan menu dibatalkan.")
-                        press_enter()
-                        return
+                else:
+                    try:
+                        kalori = int(kalori)
+                        if kalori < 0:
+                            print(f"Kalori tidak boleh negatif! (sisa kesempatan: {2 - kesempatan})")
+                        elif kalori == 0:
+                            print(f"Kalori harus lebih dari nol! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            break
+                    except ValueError:
+                        print(f"Kalori harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                if kesempatan == 2:
+                    print("Update menu dibatalkan.")
+                    press_enter()
+                    return
                         
-            harga = input("Harga baru: ").strip()
             for kesempatan in range(3):
-                if harga:
-                    break
-                else:
+                harga = input("Harga baru: ").strip()
+                if harga == "":
                     print(f"Harga tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    if kesempatan < 2:
-                        harga = input("Harga: ").strip()
-                    else:
-                        print("Penambahan menu dibatalkan.")
-                        press_enter()
-                        return
-                    
-            stok = input("Stok baru: ").strip()
-            for kesempatan in range(3):
-                if stok:
-                    break
                 else:
+                    try:
+                        harga = int(harga)
+                        if harga < 0:
+                            print(f"Harga tidak boleh negatif! (sisa kesempatan: {2 - kesempatan})")
+                        elif harga == 0:
+                            print(f"Harga harus lebih dari nol! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            break
+                    except ValueError:
+                        print(f"Harga harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                if kesempatan == 2:
+                    print("Update menu dibatalkan.")
+                    press_enter()
+                    return
+            
+            for kesempatan in range(3):
+                stok = input("Stok baru: ").strip()
+                if stok == "":
                     print(f"Stok tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                    if kesempatan < 2:
-                        stok = input("Stok: ").strip()
-                    else:
-                        print("Penambahan menu dibatalkan.")
-                        press_enter()
-                        return
+                else:
+                    try:
+                        stok = int(stok)
+                        if stok < 0:
+                            print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            break
+                    except ValueError:
+                        print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                if kesempatan == 2:
+                    print("Update menu dibatalkan.")
+                    press_enter()
+                    return
 
             baris_asli = toko_df.index[idx]
         
             update_makanan(
-                baris_asli,
-                nama if nama else None,
-                int(kalori) if kalori.isdigit() else None,
-                int(harga) if harga.isdigit() else None,
-                int(stok) if stok.isdigit() else None
+            baris_asli,
+            nama,
+            kalori,
+            harga,
+            stok
             )
         
             print("Menu berhasil diperbarui.")
             press_enter()
 
         elif pilih == "3":
+            print("=== HAPUS MAKANAN ===")
+            clear_screen()
             idx = input("Index makanan: ").strip()
 
             if idx.isdigit():
@@ -311,10 +335,8 @@ def kelola_stok(user):
 
     print(toko_df[["nama","stok"]].assign(no=range(1, len(toko_df) + 1))[["no","nama","stok"]].to_string(index=False))
 
-    idx = input("Index makanan: ").strip()
+    idx = input("\nIndex makanan (Tekan ENTER untuk batal): ").strip()
     if not idx.isdigit():
-        print("Index tidak valid, masukkan angka.")
-        press_enter()
         return
 
     idx = int(idx) - 1
@@ -325,17 +347,24 @@ def kelola_stok(user):
 
     baris_asli = toko_df.loc[idx, "__idx"]
 
-    stok = input("Stok baru: ").strip()
-    if not stok.isdigit():
-        print("Stok harus berupa angka.")
-        press_enter()
-        return
-
-    stok = int(stok)
-    if stok < 0:
-        print("Stok tidak boleh negatif.")
-        press_enter()
-        return
+    clear_screen()
+    for kesempatan in range(3):
+        stok = input("Stok baru: ").strip()
+        if stok == "":
+            print(f"Stok tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
+        else:
+            try:
+                stok = int(stok)
+                if stok < 0:
+                    print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
+                else:
+                    break
+            except ValueError:
+                print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+        if kesempatan == 2:
+            print("Update menu dibatalkan.")
+            press_enter()
+            return
 
     df.at[baris_asli, "stok"] = stok
     save_makanan(df)
@@ -396,7 +425,3 @@ def menu_mitra(user):
             laporan_penjualan(user)
         elif pilih == "0":
             break
-            
-
-
-

@@ -27,7 +27,7 @@ def print_hasil(df, judul="Hasil"):
 
 def menu_rekomendasi():
     while True:
-        print("\n=== MENU REKOMENDASI MAKANAN ===")
+        print("=== MENU REKOMENDASI MAKANAN ===")
         print("1. Rekomendasi Kalori Rendah")
         print("2. Rekomendasi Harga Murah")
         print("3. Rekomendasi Terbaik")

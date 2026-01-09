@@ -150,9 +150,9 @@ def menu_pelanggan(user):
                 if not keyword:
                     print("Kata kunci pencarian tidak boleh kosong.")
                     press_enter()
+                    continue
                 else:
                     hasil = linear_search_makanan(df, keyword)
-    
                 if hasil.empty:
                     print("Makanan tidak ditemukan.")
                 else:
@@ -163,13 +163,14 @@ def menu_pelanggan(user):
                         [["no", "nama", "restoran", "kalori", "harga"]]
                         .to_string(index=False)
                     )
-            
                 press_enter()
+                continue
             elif sub == "2":
                 continue
             else:
                 print("Pilihan tidak valid.")
                 press_enter()
+                continue
 
         elif pilih == "3":
             clear_screen()
