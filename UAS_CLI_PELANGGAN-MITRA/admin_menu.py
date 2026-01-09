@@ -55,18 +55,19 @@ def manajemen_user():
                 u = input("Masukkan Username: ").strip()
                 user = load_users().get(u)
                 if u in users:
-                    confirm = input(f"Yakin hapus user '{u}'? (y/n): ").strip().lower()
-                    if confirm == "y":
-                        delete_user(u)
-                        print(f"User '{u}' telah dihapus.")
-                        press_enter()
-                        return
-                    elif confirm == "n":
-                        print("Hapus user dibatalkan.")
-                        press_enter()
-                        return
-                    else:
-                        print(f"Input tidak valid, coba lagi (sisa kesempatan: {2 - kesempatan}).")
+                    for kesempatan in range(3):
+                        confirm = input(f"Yakin hapus user '{u}'? (y/n): ").strip().lower()
+                        if confirm == "y":
+                            delete_user(u)
+                            print(f"User '{u}' telah dihapus.")
+                            press_enter()
+                            return
+                        elif confirm == "n":
+                            print("Hapus user dibatalkan.")
+                            press_enter()
+                            return
+                        else:
+                            print(f"Input tidak valid, coba lagi (sisa kesempatan: {2 - kesempatan}).")
                 elif u == "":
                     print(f"Username tidak boleh kosong (sisa kesempatan: {2 - kesempatan}).")
                 elif not user:
@@ -216,14 +217,15 @@ def manajemen_data():
                 stok = input("Stok: ").strip()
                 if stok == "":
                     print(f"Stok tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                elif stok.isdigit():
-                    stok = int(stok)
-                    if stok < 0:
-                        print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
-                    else:
-                        break
-                elif not stok.isdigit():
-                    print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                else:
+                    try:
+                        stok = int(stok)
+                        if stok < 0:
+                            print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            break
+                    except ValueError:
+                        print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
                     print("Penambahan menu dibatalkan.")
                     press_enter()
@@ -254,7 +256,7 @@ def manajemen_data():
                     except ValueError:
                         print(f"Index tidak valid, masukkan angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
-                    print("Update data makanan dibatalkan.")
+                    print("Update makanan dibatalkan.")
                     press_enter()
                     return
                 
@@ -299,7 +301,7 @@ def manajemen_data():
                     except ValueError:
                         print(f"Kalori harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
-                    print("Penambahan menu dibatalkan.")
+                    print("Update makanan dibatalkan.")
                     press_enter()
                     return
                 
@@ -319,7 +321,7 @@ def manajemen_data():
                     except ValueError:
                         print(f"Harga harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
-                    print("Penambahan menu dibatalkan.")
+                    print("Update makanan dibatalkan.")
                     press_enter()
                     return
 
@@ -327,16 +329,17 @@ def manajemen_data():
                 stok = input("Stok baru: ").strip()
                 if stok == "":
                     print(f"Stok tidak boleh kosong! (sisa kesempatan: {2 - kesempatan})")
-                elif stok.isdigit():
-                    stok = int(stok)
-                    if stok < 0:
-                        print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
-                    else:
-                        break
-                elif not stok.isdigit():
-                    print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
+                else:
+                    try:
+                        stok = int(stok)
+                        if stok < 0:
+                            print(f"Stok minimal 0! (sisa kesempatan: {2 - kesempatan})")
+                        else:
+                            break
+                    except ValueError:
+                        print(f"Stok harus berupa angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
-                    print("Penambahan menu dibatalkan.")
+                    print("Update makanan dibatalkan.")
                     press_enter()
                     return
             
@@ -375,7 +378,7 @@ def manajemen_data():
                         idx = int(idx) - 1
                         if idx < 0 or idx >= len(df):
                             print(f"Index tidak ditemukan (sisa kesempatan: {2 - kesempatan}).")
-                        else:   
+                        else:
                             df = df.drop(idx).reset_index(drop=True)
                             save_makanan(df)
                             print("Makanan berhasil dihapus")
@@ -384,7 +387,7 @@ def manajemen_data():
                     except ValueError:
                         print(f"Index tidak valid, masukkan angka! (sisa kesempatan: {2 - kesempatan})")
                 if kesempatan == 2:
-                    print("Update data makanan dibatalkan.")
+                    print("Hapus makanan dibatalkan.")
                     press_enter()
                     return
 
