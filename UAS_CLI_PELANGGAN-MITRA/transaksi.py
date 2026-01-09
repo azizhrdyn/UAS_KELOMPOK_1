@@ -89,6 +89,7 @@ def order_makanan(user):
 
     order_lines = []
     total = 0
+    clear_screen()
 
     for idx in indices:
         if idx in df.index:
@@ -131,7 +132,7 @@ def order_makanan(user):
         return
 
     clear_screen()
-    print("\n=== Ringkasan Order ===")
+    print("=== Ringkasan Order ===")
     for o in order_lines:
         print(f"{o[1]} ({o[2]}) x{o[3]} - Rp{o[5]}")
     print("Total: Rp", total)
@@ -232,4 +233,3 @@ def simulasi_pembayaran(total):
                     print("Pembayaran dibatalkan.")
                     press_enter()
                     return False
-
